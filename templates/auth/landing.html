@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+
+{% block title %}Tokenly - Mobile POS & Peak-Hour Token Management{% endblock %}
+
+{% block content %}
+<!-- Full-Screen Cinematic 3D Logo Reveal Splash Overlay -->
+<div id="tokenlySplash" class="fixed inset-0 z-[99999] bg-[#0b1736] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700 ease-in-out" onclick="dismissSplash()">
+    <!-- Ambient Radial Glow -->
+    <div class="splash-glow"></div>
+
+    <!-- 3D Ribbon Logo Emblem & Particles -->
+    <div class="relative w-[280px] h-[280px] flex items-center justify-center">
+        <!-- Canvas Particles -->
+        <canvas id="splashCanvas" width="400" height="400" class="absolute -top-[60px] -left-[60px] pointer-events-none"></canvas>
+
+        <!-- Vector 3D Ribbon Emblem -->
+        <svg class="splash-logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="splashLeftGrad" x1="20" y1="20" x2="100" y2="180" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#38bdf8"/>
+                    <stop offset="50%" stop-color="#0284c7"/>
+                    <stop offset="100%" stop-color="#0369a1"/>
+                </linearGradient>
+                <linearGradient id="splashRightGrad" x1="180" y1="20" x2="90" y2="180" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#38bdf8"/>
+                    <stop offset="30%" stop-color="#00d4ff"/>
+                    <stop offset="70%" stop-color="#0284c7"/>
+                    <stop offset="100%" stop-color="#075985"/>
+                </linearGradient>
+                <linearGradient id="splashTopGrad" x1="10" y1="20" x2="190" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#7dd3fc"/>
+                    <stop offset="50%" stop-color="#00e5ff"/>
+                    <stop offset="100%" stop-color="#0284c7"/>
+                </linearGradient>
+            </defs>
+            <path class="splash-ribbon-1" d="M 30 35 C 50 35, 75 40, 80 75 L 80 165 C 80 175, 65 175, 65 165 L 65 85 C 65 60, 45 55, 30 55 Z" fill="url(#splashLeftGrad)" stroke="url(#splashTopGrad)" stroke-width="1.5" />
+            <path class="splash-ribbon-2" d="M 30 35 C 100 25, 175 25, 175 55 C 175 75, 140 75, 115 75 L 115 165 C 115 175, 100 175, 100 165 L 100 60 C 125 60, 160 55, 155 45 C 145 38, 90 40, 30 35 Z" fill="url(#splashRightGrad)" stroke="url(#splashTopGrad)" stroke-width="1.5" />
+        </svg>
+
+        <!-- Sweeping Lens Flare -->
+        <div class="splash-flare"></div>
+    </div>
+
+    <!-- Animated Brand Typography -->
+    <h1 class="splash-text">TOKENLY</h1>
+    <div class="splash-sub">POS & Peak-Hour Token Management</div>
+
+    <!-- Skip Hint Pill -->
+    <div class="absolute bottom-6 right-6 text-[11px] font-semibold text-cyan-400 bg-white/5 border border-cyan-500/30 px-4 py-2 rounded-full backdrop-blur-md hover:bg-cyan-500/20 transition">
+        Click anywhere to skip →
+    </div>
+</div>
+
+<div class="space-y-16 py-8">
+
+    <!-- Hero Section -->
+    <div class="relative text-center max-w-4xl mx-auto space-y-6 pt-4">
+        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <span>Peak-Hour Token Management System for Food Outlets</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            Faster Service. Happier Customers.<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-amber-400 to-blue-500">Zero Peak-Hour Queues.</span>
+        </h1>
+
+        <p class="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto font-medium">
+            Tokenly turns any smartphone, tablet, or desktop into a high-speed multi-terminal cash register with automatic daily sequential tokens (#001, #002) and 58mm thermal receipt printing.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <a href="{{ url_for('auth.register') }}" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold text-sm btn-blue shadow-xl flex items-center justify-center space-x-2">
+                <span>Start Subscription (₹1,999/Yr)</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold text-sm bg-[#161f30] hover:bg-[#1f2d44] text-white border border-[#1f2d44] flex items-center justify-center transition">
+                <span>Login to Business Terminal</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Feature Highlights Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        
+        <div class="glass-panel p-6 space-y-3 rounded-2xl border border-[#1f2d44]">
+            <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">Half & Full Portion Billing</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                One-tap portion pricing (+ Half / + Full) designed specifically for food stalls, Chinese counters, rolls, and momos outlets.
+            </p>
+        </div>
+
+        <div class="glass-panel p-6 space-y-3 rounded-2xl border border-[#1f2d44]">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">58mm Thermal Printer Ready</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Instant Bluetooth or USB thermal receipt printing formatted directly from your phone browser via `@media print`.
+            </p>
+        </div>
+
+        <div class="glass-panel p-6 space-y-3 rounded-2xl border border-[#1f2d44]">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            </div>
+            <h3 class="text-base font-bold text-white">Permanent Sales & Revenue Logs</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Review earnings, order history, top selling items, and search past days, weeks, or custom dates without limitations.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Pricing Card Section -->
+    <div class="max-w-md mx-auto glass-panel p-8 text-center rounded-3xl border border-cyan-500/40 relative shadow-2xl space-y-6">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-cyan-600 text-white font-black text-[10px] uppercase tracking-widest">
+            ANNUAL FLAT PLAN
+        </div>
+
+        <h3 class="text-xl font-extrabold text-white">Full Business Access</h3>
+        <div class="text-4xl font-black text-white font-mono">
+            ₹1,999 <span class="text-xs font-normal text-slate-400">/ year</span>
+        </div>
+
+        <ul class="text-xs text-slate-300 space-y-2.5 text-left max-w-xs mx-auto">
+            <li class="flex items-center"><svg class="w-4 h-4 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Unlimited POS Terminals & Orders</li>
+            <li class="flex items-center"><svg class="w-4 h-4 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Daily Sequential Token Logic (#001, #002)</li>
+            <li class="flex items-center"><svg class="w-4 h-4 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> 58mm Thermal Printer Bluetooth support</li>
+            <li class="flex items-center"><svg class="w-4 h-4 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Dynamic QR Menu Generator</li>
+            <li class="flex items-center"><svg class="w-4 h-4 text-emerald-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Multi-Theme Obsidian Crimson & Cobalt Blue</li>
+        </ul>
+
+        <a href="{{ url_for('auth.register') }}" class="block w-full py-3.5 rounded-xl font-bold text-sm btn-accent shadow-xl">
+            Activate Subscription Now →
+        </a>
+    </div>
+
+</div>
+
+<style>
+/* Splash Screen Styles & Animations */
+.splash-glow {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.25) 0%, rgba(0, 128, 255, 0.1) 40%, rgba(11, 23, 54, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: splashGlowPulse 3s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
+}
+
+@keyframes splashGlowPulse {
+    0% { opacity: 0; transform: scale(0.4); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.7; transform: scale(1); }
+}
+
+.splash-logo-svg {
+    width: 220px;
+    height: 220px;
+    filter: drop-shadow(0 0 25px rgba(0, 195, 255, 0.6)) drop-shadow(0 0 50px rgba(0, 102, 255, 0.4));
+    transform: scale(0.85) rotateX(15deg);
+    opacity: 0;
+    animation: splashLogoLock 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
+}
+
+@keyframes splashLogoLock {
+    0% {
+        opacity: 0;
+        transform: scale(0.6) rotateX(45deg) translateY(-20px);
+        filter: drop-shadow(0 0 5px rgba(0, 195, 255, 0.2)) blur(10px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.05) rotateX(-5deg) translateY(0);
+        filter: drop-shadow(0 0 35px rgba(0, 212, 255, 0.9)) blur(0px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotateX(0deg) translateY(0);
+        filter: drop-shadow(0 0 25px rgba(0, 195, 255, 0.65));
+    }
+}
+
+.splash-ribbon-1, .splash-ribbon-2 {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: splashDrawRibbon 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.2s;
+}
+
+@keyframes splashDrawRibbon {
+    to { stroke-dashoffset: 0; }
+}
+
+.splash-flare {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 130px;
+    height: 130px;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,229,255,0.8) 25%, rgba(0,128,255,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+    mix-blend-mode: screen;
+    animation: splashFlareSweep 1.6s ease-in-out forwards 1.6s;
+}
+
+@keyframes splashFlareSweep {
+    0% { opacity: 0; left: 30px; top: 40px; transform: scale(0.2); }
+    30% { opacity: 1; transform: scale(1.4); }
+    70% { opacity: 0.9; left: 240px; top: 40px; transform: scale(1); }
+    100% { opacity: 0; left: 260px; top: 40px; transform: scale(0.1); }
+}
+
+.splash-text {
+    margin-top: 25px;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 20px;
+    text-indent: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(0, 150, 255, 0.2);
+    animation: splashFadeText 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.4s;
+}
+
+@keyframes splashFadeText {
+    0% {
+        opacity: 0;
+        transform: translateY(25px);
+        letter-spacing: 10px;
+        text-indent: 10px;
+        filter: blur(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: 20px;
+        text-indent: 20px;
+        filter: blur(0px);
+    }
+}
+
+.splash-sub {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 5px;
+    text-indent: 5px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: splashFadeSub 1.2s ease forwards 2.0s;
+}
+
+@keyframes splashFadeSub {
+    to { opacity: 0.85; }
+}
+</style>
+
+<script>
+let splashDismissed = false;
+
+function dismissSplash() {
+    if (splashDismissed) return;
+    splashDismissed = true;
+    const splash = document.getElementById('tokenlySplash');
+    if (splash) {
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 700);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('splashCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: 200 + (Math.random() - 0.5) * 200,
+                y: 200 + (Math.random() - 0.5) * 200,
+                targetX: 200 + (Math.random() - 0.5) * 60,
+                targetY: 200 + (Math.random() - 0.5) * 100,
+                size: 1.5 + Math.random() * 2,
+                alpha: 0.8,
+                speed: 0.03 + Math.random() * 0.03,
+                color: Math.random() > 0.5 ? '#00d4ff' : '#38bdf8'
+            });
+        }
+        let start = Date.now();
+        function anim() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let elapsed = (Date.now() - start) / 1000;
+            if (elapsed < 3) {
+                particles.forEach(p => {
+                    p.x += (p.targetX - p.x) * 0.04;
+                    p.y += (p.targetY - p.y) * 0.04;
+                    p.alpha = Math.max(0, 1 - elapsed / 3);
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 8;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+                requestAnimationFrame(anim);
+            }
+        }
+        anim();
+    }
+
+    setTimeout(dismissSplash, 3200);
+});
+</script>
+{% endblock %}

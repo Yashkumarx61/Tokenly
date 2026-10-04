@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Start Free Trial - Tokenly{% endblock %}
+
+{% block content %}
+<style>
+/* Light Theme Overrides for Registration View */
+body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+header span.text-white {
+    color: #0f172a !important;
+}
+
+header span.text-slate-400 {
+    color: #64748b !important;
+}
+</style>
+
+<div class="min-h-[85vh] flex flex-col items-center justify-center py-6 px-4">
+    <div class="w-full max-w-lg space-y-6">
+
+        <!-- Header Showcase & Official Tokenly 3D Logo Lockup -->
+        <div class="text-center space-y-2">
+            <div class="w-14 h-14 mx-auto flex items-center justify-center filter drop-shadow(0 8px 16px rgba(2,132,199,0.3)) transform hover:scale-105 transition">
+                <img src="{{ url_for('static', filename='images/tokenly_logo_3d.svg') }}" alt="Tokenly 3D Logo" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-xl font-black tracking-tight text-slate-900 uppercase">TOKENLY</h1>
+        </div>
+
+        <!-- Light Elevated Registration Card Architecture -->
+        <div class="bg-white p-6 sm:p-8 space-y-5 rounded-[24px] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative overflow-hidden">
+            <div class="text-center pb-3 border-b border-slate-100">
+                <h2 class="text-xl font-extrabold text-slate-900">Start Your Free Trial</h2>
+                <p class="text-xs text-slate-500 font-medium mt-1">Get instant multi-terminal POS access in seconds</p>
+            </div>
+
+            <form id="registration-form" action="{{ url_for('auth.register') }}" method="POST" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+                {{ form.hidden_tag() }}
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Business Name</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </div>
+                        {{ form.business_name(id="reg-business-name", class="w-full pl-10 pr-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="Business Name", required=True) }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">Owner Full Name</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            </div>
+                            {{ form.owner_name(id="reg-owner-name", class="w-full pl-10 pr-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="Owner Full Name", required=True) }}
+                        </div>
+                    </div>
+
+                    <!-- Clean 10-Digit Mobile Input -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">Mobile Number</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center font-bold text-xs text-slate-500 pointer-events-none">+91</span>
+                            {{ form.phone(id="phone-input", class="w-full pl-11 pr-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="9876543210", required=True) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Choose Username ID</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        </div>
+                        {{ form.username(id="reg-username", class="w-full pl-10 pr-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="Choose Username ID", required=True) }}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">Create Password</label>
+                        {{ form.password(id="reg-password", class="w-full px-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="Create Password", required=True) }}
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">Confirm Password</label>
+                        {{ form.confirm_password(id="reg-confirm-password", class="w-full px-4 py-3 rounded-[14px] bg-[#f0f7ff] border border-[#dbeafe] text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 transition", placeholder="Confirm Password", required=True) }}
+                    </div>
+                </div>
+
+                <!-- Plan Summary Card: Strikethrough ₹1,999 & "FREE TRIAL" Display -->
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-blue-50 border border-emerald-200 flex items-center justify-between shadow-xs">
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-extrabold text-slate-900 uppercase tracking-wide">Annual POS Access</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Free Trial Active</span>
+                        </div>
+                        <div class="text-[11px] text-slate-600 font-semibold">
+                            Start 14-Day Free Trial • No Credit Card / UPI Required
+                        </div>
+                        <div class="text-[10px] text-slate-500 font-medium">
+                            Annual POS Access • Multi-Terminal
+                        </div>
+                    </div>
+                    <div class="text-right pl-3">
+                        <div class="text-xs font-bold text-slate-400 line-through">₹1,999</div>
+                        <div class="text-emerald-600 font-extrabold text-xl sm:text-2xl tracking-tight">FREE TRIAL</div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="submit-reg-btn" class="w-full py-3.5 rounded-[14px] font-extrabold text-sm bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2 transition active:scale-[0.99]">
+                        <span>Start Free Trial & Access Terminal →</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center pt-2">
+                <a href="{{ url_for('auth.login') }}" class="text-xs font-medium text-slate-500 hover:text-slate-900 transition">
+                    Already have an account? <span class="text-blue-600 font-bold underline">Login here</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function handleRegistrationSubmit(e) {
+    e.preventDefault();
+    
+    const p1 = document.getElementById('reg-password').value;
+    const p2 = document.getElementById('reg-confirm-password').value;
+    if (p1 !== p2) {
+        alert('Passwords do not match. Please re-check.');
+        return;
+    }
+
+    const payload = {
+        business_name: document.getElementById('reg-business-name').value.trim(),
+        owner_name: document.getElementById('reg-owner-name').value.trim(),
+        phone: document.getElementById('phone-input').value.trim(),
+        username: document.getElementById('reg-username').value.trim(),
+        password: p1
+    };
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const submitBtn = document.getElementById('submit-reg-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Activating Free Account...</span>';
+
+    fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect_url || '/pos';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Start Free Trial & Access Terminal →</span>';
+            alert(data.error || 'Registration failed.');
+        }
+    })
+    .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Start Free Trial & Access Terminal →</span>';
+        alert('Connection error. Please try again.');
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,251 @@
+/* TOKENLY POS - Master Mobile-First Dark UI Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+
+:root {
+    /* Tokenly Dark UI Palette matching Page01-Page04 Reference Designs */
+    --bg-dark: #0b0f19;          /* Deep Charcoal Navy */
+    --bg-surface: #161f30;       /* Dark slate card background */
+    --border-color: #1f2d44;     /* Subtle border divider */
+    
+    --accent-blue: #2563eb;      /* Primary Electric Blue */
+    --accent-blue-hover: #1d4ed8;
+    --accent-blue-glow: rgba(37, 99, 235, 0.4);
+    
+    --accent-red: #e11d48;       /* POS Master Action Crimson Red */
+    --accent-red-hover: #be123c;
+    --accent-red-glow: rgba(225, 29, 72, 0.4);
+
+    --text-primary: #f9fafb;
+    --text-muted: #94a3b8;
+    
+    --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --card-radius: 16px;
+    --btn-radius: 12px;
+}
+
+body.theme-blue {
+    --accent-red: #2563eb;
+    --accent-red-hover: #1d4ed8;
+    --accent-red-glow: rgba(37, 99, 235, 0.4);
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Glass & Surface Cards matching Reference Screen Designs */
+.glass-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Stylized Logo Icon (Cyan / Electric Blue Gradient T) */
+.tokenly-logo-icon {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #005bea 100%);
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.3);
+}
+
+.tokenly-logo-icon-red {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.35);
+}
+
+/* Primary Electric Blue Button */
+.btn-blue {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: var(--btn-radius);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 14px var(--accent-blue-glow);
+}
+
+.btn-blue:hover, .btn-blue:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px var(--accent-blue-glow);
+    filter: brightness(1.1);
+}
+
+/* Master Crimson Red Generate Token & Bill Button (Matching Screenshot 3 & 4) */
+.btn-red-bill {
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    color: #ffffff;
+    font-weight: 800;
+    border-radius: var(--btn-radius);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 6px 20px var(--accent-red-glow);
+}
+
+.btn-red-bill:hover, .btn-red-bill:active {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px var(--accent-red-glow);
+    filter: brightness(1.1);
+}
+
+/* Default Fallback Accent Button */
+.btn-accent {
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: var(--btn-radius);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 14px var(--accent-red-glow);
+}
+
+/* Category Filter Pills (Horizontal Scroll matching Page 3 & 4) */
+.category-pill {
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-weight: 700;
+    font-size: 12px;
+    background: #111827;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.category-pill.active {
+    background: #e11d48;
+    color: #ffffff;
+    border-color: #f43f5e;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
+}
+
+/* Portion Action Buttons (Matching Page 4 Half/Full Buttons) */
+.portion-btn {
+    min-height: 38px;
+    font-weight: 700;
+    border-radius: 8px;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.portion-btn:active {
+    transform: scale(0.96);
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+    background-color: rgba(5, 8, 15, 0.88);
+    backdrop-filter: blur(10px);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+    background: #1f2d44;
+    border-radius: 3px;
+}
+
+/* -------------------------------------------------------------
+   THERMAL PRINTER PRINT STYLESHEET (@media print)
+   Compact 58mm / 80mm format with prominent token number
+   ------------------------------------------------------------- */
+@media print {
+    body * {
+        visibility: hidden !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    
+    #thermal-receipt-printable, #thermal-receipt-printable * {
+        visibility: visible !important;
+    }
+    
+    #thermal-receipt-printable {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 58mm !important;
+        max-width: 80mm !important;
+        padding: 4mm 2mm !important;
+        margin: 0 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        color: #000000 !important;
+        background: #ffffff !important;
+        font-size: 11pt !important;
+        line-height: 1.2 !important;
+    }
+
+    .thermal-header {
+        text-align: center;
+        border-bottom: 1px dashed #000;
+        padding-bottom: 4px;
+        margin-bottom: 6px;
+    }
+
+    .thermal-title {
+        font-size: 14pt;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .thermal-token-box {
+        border: 2px solid #000;
+        text-align: center;
+        padding: 6px 2px;
+        margin: 8px 0;
+    }
+
+    .thermal-token-num {
+        font-size: 28pt;
+        font-weight: 900;
+        letter-spacing: 1px;
+    }
+
+    .thermal-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 6px 0;
+        font-size: 10pt;
+    }
+
+    .thermal-table th {
+        border-bottom: 1px solid #000;
+        text-align: left;
+    }
+
+    .thermal-table td {
+        padding: 2px 0;
+    }
+
+    .thermal-divider {
+        border-top: 1px dashed #000;
+        margin: 6px 0;
+    }
+
+    .thermal-total-row {
+        font-size: 13pt;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .thermal-footer {
+        text-align: center;
+        font-size: 9pt;
+        margin-top: 10px;
+        border-top: 1px dashed #000;
+        padding-top: 6px;
+    }
+}

@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}{{ business.business_name }} - POS Terminal{% endblock %}
+
+{% block content %}
+<style>
+/* Light Theme Override for POS Terminal View */
+body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+/* Light Theme Navigation Header Adjustments */
+header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+header span.text-white {
+    color: #0f172a !important;
+}
+
+header span.text-slate-400 {
+    color: #64748b !important;
+}
+
+/* Category Filter Pills (Light Mode Contrast) */
+.category-pill {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+}
+
+.category-pill:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+.category-pill.active {
+    background: #ef4444 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35) !important;
+}
+</style>
+
+<div class="space-y-4">
+
+    <!-- Top Terminal Header Bar (Crisp White Light Theme Layout) -->
+    <div class="bg-white p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-sm border border-slate-200">
+        <div class="flex items-center space-x-3">
+            <!-- Red Chef Hat Icon -->
+            <div class="w-11 h-11 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600 font-extrabold text-xl shadow-xs shrink-0">
+                🍳
+            </div>
+            <div>
+                <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight flex items-center">
+                    <span>{{ business.business_name }}</span>
+                    <span class="ml-2 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+                        ● Online
+                    </span>
+                </h1>
+                <p class="text-xs text-slate-500 font-medium">Chinese Food • Fast Delivery Available</p>
+            </div>
+        </div>
+
+        <!-- Right Header Action Controls -->
+        <div class="flex items-center space-x-2">
+            <!-- Business Account Button -->
+            <a href="{{ url_for('auth.subscription') }}" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 transition" title="Business Account">
+                <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </a>
+            <!-- Menu Management Button -->
+            <a href="{{ url_for('admin.dashboard') }}" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 flex items-center space-x-1.5 transition">
+                <span>🍴</span>
+                <span>Menu</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Category Filter Pills (Horizontal Scroll Bar) -->
+    <div class="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none">
+        <button class="category-pill active" data-category="all">
+            All
+        </button>
+        {% for cat in categories %}
+            <button class="category-pill" data-category="{{ cat.id }}">
+                {{ cat.name }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <!-- Main Terminal Grid Layout: Food Cards (Left) & Current Order Drawer (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- Left Column: 2-Column Product Cards Grid -->
+        <div class="lg:col-span-7 space-y-4">
+            
+            {% if not items %}
+                <!-- Empty State -->
+                <div class="bg-white p-10 text-center rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 text-3xl">
+                        📋
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">No menu items yet.</h3>
+                    <p class="text-xs text-slate-500 max-w-sm mx-auto">Click 'Menu' above to add your food items.</p>
+                    <a href="{{ url_for('admin.dashboard') }}" class="inline-block px-5 py-2.5 rounded-xl font-bold text-xs btn-blue">
+                        + Add Food Items
+                    </a>
+                </div>
+            {% else %}
+
+                <!-- 2-Column Food Cards Grid (Clean White Light Theme) -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    {% for item in items %}
+                        <div class="food-card-wrapper" data-category="{{ item.category_id }}" data-name="{{ item.name }}">
+                            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 flex flex-col justify-between h-full relative overflow-hidden group transition duration-200">
+                                
+                                <!-- Food Image Showcase -->
+                                <div class="space-y-2">
+                                    <div class="relative h-28 sm:h-32 w-full rounded-xl overflow-hidden bg-slate-50 border border-slate-100">
+                                        {% if item.image_url %}
+                                            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                        {% else %}
+                                            <div class="w-full h-full flex items-center justify-center text-slate-400 bg-slate-50">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div>
+                                        <h3 class="font-extrabold text-xs sm:text-sm text-slate-900 leading-snug truncate">{{ item.name }}</h3>
+                                    </div>
+                                </div>
+
+                                <!-- Half & Full Variant Portion Action Buttons -->
+                                <div class="pt-2 border-t border-slate-100 mt-2 grid {% if item.half_price %}grid-cols-2{% else %}grid-cols-1{% endif %} gap-1.5">
+                                    
+                                    {% if item.half_price %}
+                                        <button data-id="{{ item.id }}" data-name="{{ item.name }}" data-portion="half" data-price="{{ item.half_price }}" onclick="handleAddToCart(this)" 
+                                            class="portion-btn w-full py-1.5 px-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 flex items-center justify-between text-[11px] transition">
+                                            <span class="font-bold text-amber-800">Half</span>
+                                            <span class="font-mono font-extrabold text-slate-900">₹{{ "%.0f"|format(item.half_price) }}</span>
+                                        </button>
+                                    {% endif %}
+
+                                    <button data-id="{{ item.id }}" data-name="{{ item.name }}" data-portion="full" data-price="{{ item.full_price }}" onclick="handleAddToCart(this)" 
+                                        class="portion-btn w-full py-1.5 px-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 flex items-center justify-between text-[11px] transition">
+                                        <span class="font-bold text-emerald-800">Full</span>
+                                        <span class="font-mono font-extrabold text-slate-900">₹{{ "%.0f"|format(item.full_price) }}</span>
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Right Column: Current Order Fixed Panel (Light Theme Drawer Architecture) -->
+        <div class="lg:col-span-5 sticky top-20">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xl space-y-4">
+                
+                <!-- Drawer Header -->
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <h2 class="font-extrabold text-sm text-slate-900 uppercase tracking-tight">Current Order</h2>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span id="cart-count-badge" class="px-2 py-0.5 rounded-full bg-red-50 text-red-600 font-mono font-bold text-xs border border-red-200">0</span>
+                        <button onclick="clearCart()" class="text-xs text-slate-400 hover:text-red-600 transition font-semibold">Clear</button>
+                    </div>
+                </div>
+
+                <!-- Itemized Cart Rows -->
+                <div id="cart-items-list" class="min-h-[140px] max-h-[260px] overflow-y-auto pr-1 space-y-2">
+                </div>
+
+                <!-- Empty Cart Visual State -->
+                <div id="empty-cart-notice" class="flex flex-col items-center justify-center py-8 text-center text-slate-400 space-y-2">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path></svg>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-500">Tap menu items to add...</span>
+                </div>
+
+                <!-- Payment Mode Selection -->
+                <div class="space-y-1 pt-2 border-t border-slate-100">
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="payment_method" value="cash" checked class="peer sr-only">
+                            <div class="py-1.5 text-center text-xs font-bold rounded-xl bg-slate-100 border border-slate-200 text-slate-700 peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white transition">
+                                💵 Cash
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="payment_method" value="upi" class="peer sr-only">
+                            <div class="py-1.5 text-center text-xs font-bold rounded-xl bg-slate-100 border border-slate-200 text-slate-700 peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white transition">
+                                📱 UPI
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="payment_method" value="card" class="peer sr-only">
+                            <div class="py-1.5 text-center text-xs font-bold rounded-xl bg-slate-100 border border-slate-200 text-slate-700 peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white transition">
+                                💳 Card
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Totals Calculation Breakdown -->
+                <div class="space-y-1 pt-2 border-t border-slate-100 text-xs">
+                    <div class="flex justify-between text-slate-500 font-medium">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal" class="font-mono text-slate-900 font-bold">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500 font-medium">
+                        <span>Tax (0%)</span>
+                        <span id="cart-tax" class="font-mono text-slate-900 font-bold">₹0.00</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-base font-extrabold text-slate-900 pt-2 border-t border-slate-100">
+                        <span>Grand Total</span>
+                        <span id="cart-grand-total" class="font-mono text-emerald-600 font-black text-lg">₹0.00</span>
+                    </div>
+                </div>
+
+                <!-- Bold Crimson Red Master CTA: Generate Token & Bill -->
+                <button id="checkout-btn" disabled class="w-full py-3.5 rounded-xl font-black text-sm bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-lg shadow-red-500/25 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center transition active:scale-[0.99]">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 00-2 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Generate Token & Bill</span>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pos.js') }}"></script>
+{% endblock %}

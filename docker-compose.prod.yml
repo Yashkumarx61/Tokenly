@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  tokenly-app:
+    image: ${IMAGE_TAG:-ghcr.io/your-username/tokenly:latest}
+    container_name: tokenly-pos-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-tokenly-production-secret-key-change-me}
+      - DATABASE_URL=sqlite:////app/data/tokenly.db
+      - ANNUAL_SUBSCRIPTION_PRICE=1999
+    volumes:
+      - tokenly-db-data:/app/data
+      - tokenly-uploads:/app/static/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/healthz || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  tokenly-db-data:
+  tokenly-uploads:

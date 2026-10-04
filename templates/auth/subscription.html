@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Subscription - Tokenly{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6 py-4">
+
+    <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-xl font-extrabold text-white">Annual Subscription Status</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Manage your Tokenly POS license & billing details</p>
+            </div>
+            <span class="px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span> ACTIVE
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                <div class="text-[11px] uppercase font-bold text-slate-400 tracking-wider">BUSINESS NAME</div>
+                <div class="text-base font-bold text-white">{{ business.business_name }}</div>
+                <div class="text-xs text-slate-400">ID: <span class="font-mono text-slate-200">{{ business.username }}</span></div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                <div class="text-[11px] uppercase font-bold text-slate-400 tracking-wider">ANNUAL PLAN</div>
+                <div class="text-base font-bold text-white">₹2,999 / Year</div>
+                <div class="text-xs text-emerald-400 font-semibold">{{ business.days_remaining }} Days Remaining</div>
+            </div>
+        </div>
+
+        <div class="space-y-2 text-xs text-slate-300">
+            <div class="flex justify-between py-2 border-b border-slate-800/60">
+                <span class="text-slate-400">Owner Name:</span>
+                <span class="font-semibold text-white">{{ business.owner_name }}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-800/60">
+                <span class="text-slate-400">Registered Phone:</span>
+                <span class="font-semibold text-white">{{ business.phone }}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-800/60">
+                <span class="text-slate-400">Activation Date:</span>
+                <span class="font-mono text-slate-200">{{ business.subscription_start.strftime('%d-%b-%Y') if business.subscription_start else 'N/A' }}</span>
+            </div>
+            <div class="flex justify-between py-2">
+                <span class="text-slate-400">Renewal Date:</span>
+                <span class="font-mono text-emerald-400 font-bold">{{ business.subscription_expires.strftime('%d-%b-%Y') if business.subscription_expires else 'N/A' }}</span>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+            <a href="{{ url_for('pos.terminal') }}" class="px-5 py-2.5 rounded-xl font-bold text-xs btn-accent">
+                Back to POS Terminal →
+            </a>
+            <span class="text-[11px] text-slate-400">Auto-Renewal Enabled</span>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

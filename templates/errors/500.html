@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Tokenly{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex flex-col items-center justify-center text-center py-10 px-4 space-y-4">
+    <div class="w-20 h-20 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-500 font-extrabold text-3xl font-mono shadow-xl">
+        500
+    </div>
+    <h1 class="text-2xl font-extrabold text-white">Something Went Wrong</h1>
+    <p class="text-xs text-slate-400 max-w-sm">An unexpected system exception occurred. Our system administrators have logged this event.</p>
+    <a href="{{ url_for('pos.terminal') }}" class="px-6 py-2.5 rounded-xl font-bold text-xs btn-accent">
+        Return to POS Terminal →
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Dynamic QR Menu Generator - {{ business.business_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6">
+
+    <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-6">
+        <div class="text-center space-y-1">
+            <h1 class="text-xl font-extrabold text-white">Dynamic Table & Counter QR Generator</h1>
+            <p class="text-xs text-slate-400">Generate printable QR code cards linked uniquely to your business ID: <span class="font-mono text-amber-400 font-bold">{{ business.username }}</span></p>
+        </div>
+
+        <form method="GET" action="{{ url_for('admin.qr_codes') }}" class="flex items-center justify-center space-x-3 max-w-sm mx-auto">
+            <input type="text" name="table" value="{{ table_num }}" placeholder="Table / Counter #" class="w-full px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+            <button type="submit" class="px-5 py-2 rounded-xl font-bold text-xs btn-accent shrink-0">
+                Generate QR
+            </button>
+        </form>
+
+        <!-- Printable QR Code Container -->
+        <div class="p-6 rounded-2xl bg-white text-slate-900 text-center space-y-4 max-w-xs mx-auto shadow-2xl border-4 border-slate-900">
+            <div class="text-xs font-black uppercase tracking-widest text-slate-700 border-b pb-2 border-slate-200">
+                {{ business.business_name }}
+            </div>
+            
+            <div class="py-2 flex justify-center">
+                <img src="{{ qr_image }}" alt="QR Code" class="w-48 h-48 rounded-lg shadow-inner">
+            </div>
+
+            <div class="bg-slate-100 p-2.5 rounded-xl border border-slate-200">
+                <div class="text-[10px] uppercase font-bold text-slate-500">SCAN TO VIEW MENU & ORDER</div>
+                <div class="text-lg font-black text-red-600 font-mono">TABLE #{{ table_num }}</div>
+            </div>
+            
+            <div class="text-[9px] text-slate-400 font-mono truncate">
+                {{ target_url }}
+            </div>
+        </div>
+
+        <div class="text-center pt-2">
+            <button onclick="window.print()" class="px-6 py-2.5 rounded-xl font-bold text-xs bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 inline-flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                <span>Print QR Table Standee</span>
+            </button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

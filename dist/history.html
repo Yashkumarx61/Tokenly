@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="csrf-token" content="IjI3ZWFmYWQ4ZWQzYzkzYTAwNmNlNWMzMmU1MDE2OGY3ZDE1Njc5YzMi.asK4gw.0lNGNKezDKMLnepV6L3LNBVb3a8">
+    <title>Sales History & Permanent Logs - Tokenly Demo POS</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: {
+                            900: '#0b0f19',
+                            800: '#161f30',
+                            700: '#1f2d44',
+                        },
+                        crimson: {
+                            500: '#e11d48',
+                            600: '#be123c',
+                            700: '#9f1239',
+                        },
+                        electric: {
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Design System CSS -->
+    <link rel="stylesheet" href="./static/css/style.css">
+</head>
+<body class="bg-[#0b0f19] text-slate-100 antialiased flex flex-col min-h-screen pb-24 md:pb-0">
+
+    <!-- Top Header Bar (Matching Reference Screens) -->
+    <header class="sticky top-0 z-40 bg-[#0c1322]/95 backdrop-blur-md border-b border-[#1f2d44] px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Logo & Brand Name (Official 3D Ribbon Emblem) -->
+            <a href="pos.html" class="flex items-center space-x-3 group">
+                <div class="w-9 h-9 flex items-center justify-center filter drop-shadow(0 4px 8px rgba(2,132,199,0.3)) group-hover:scale-105 transition transform">
+                    <img src="./static/images/tokenly_logo_3d.svg" alt="Tokenly 3D Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <span class="font-black text-lg tracking-tight text-white block leading-tight">TOKENLY</span>
+                    
+                        <span class="text-[11px] font-semibold text-slate-400 block -mt-0.5 truncate max-w-[150px] sm:max-w-xs">
+                            Tokenly Demo POS
+                        </span>
+                    
+                </div>
+            </a>
+
+            <!-- Right Controls -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                
+                    <!-- Active Subscription Badge -->
+                    <a href="/subscription" class="hidden sm:flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                        Active Plan (364d)
+                    </a>
+
+
+                    <!-- Desktop Navigation Links (High-Contrast Segmented Control Pill Bar) -->
+                    <div class="hidden md:flex items-center space-x-1 p-1 rounded-2xl bg-slate-100 border border-slate-200/80 shadow-xs">
+                        
+                        <!-- Tab 1: POS Terminal -->
+                        <a href="pos.html" 
+                           class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150
+                                  
+                                     text-slate-700 hover:text-slate-900 hover:bg-slate-200/70
+                                  ">
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>POS Terminal</span>
+                        </a>
+
+                        <!-- Tab 2: Menu Admin -->
+                        <a href="menu.html" 
+                           class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150
+                                  
+                                     text-slate-700 hover:text-slate-900 hover:bg-slate-200/70
+                                  ">
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                            </svg>
+                            <span>Menu Admin</span>
+                        </a>
+
+                        <!-- Tab 3: Sales History -->
+                        <a href="history.html" 
+                           class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150
+                                  
+                                     bg-slate-900 text-white shadow-sm
+                                  ">
+                            <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            <span>Sales History</span>
+                        </a>
+
+                    </div>
+
+                    <!-- Logout Button -->
+                    <a href="/logout" class="hidden md:inline-flex items-center px-3.5 py-1.5 rounded-xl text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200/80 transition ml-2">
+                        Logout
+                    </a>
+                
+            </div>
+        </div>
+    </header>
+
+    <!-- Flash Messages Container -->
+    <div class="max-w-7xl mx-auto px-4 pt-3">
+        
+            
+        
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-4">
+        
+<style>
+/* Light Theme Overrides for Sales History View */
+body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+header span.text-white {
+    color: #0f172a !important;
+}
+
+header span.text-slate-400 {
+    color: #64748b !important;
+}
+</style>
+
+<div class="space-y-6">
+
+    <!-- Header Banner (Crisp White Light Theme) -->
+    <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-xl font-extrabold text-slate-900">Permanent Sales & Token Logs</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Review past earnings, search daily tokens, and reprint thermal receipts</p>
+        </div>
+    </div>
+
+    <!-- Date Filters Bar (Light Mode Contrast) -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <form method="GET" action="history.html" class="flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Filter Presets -->
+            <div class="flex items-center space-x-1.5 overflow-x-auto">
+                <a href="history.html?preset=today" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-red-600 text-white border-red-600 shadow-sm">
+                    Today
+                </a>
+                <a href="history.html?preset=yesterday" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+                    Yesterday
+                </a>
+                <a href="history.html?preset=week" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+                    Last 7 Days
+                </a>
+                <a href="history.html?preset=month" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+                    Last 30 Days
+                </a>
+            </div>
+
+            <!-- Custom Date Range & Search Input -->
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <input type="hidden" name="preset" value="custom">
+                <input type="date" name="start_date" value="2026-10-04" class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-800 font-medium">
+                <span class="text-xs text-slate-400">to</span>
+                <input type="date" name="end_date" value="2026-10-04" class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-800 font-medium">
+                
+                <input type="text" name="search" value="" placeholder="Search Token #..." class="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 placeholder-slate-400 w-32 focus:outline-none focus:border-blue-600">
+                
+                <button type="submit" class="px-3.5 py-1.5 rounded-xl font-bold text-xs btn-blue">
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Key Sales Analytics Cards (Crisp White Light Theme) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOTAL REVENUE</div>
+            <div class="text-xl sm:text-2xl font-black text-emerald-600 font-mono">₹0.00</div>
+            <div class="text-[10px] text-slate-400">Filtered timeframe</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOKENS GENERATED</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-900 font-mono">0</div>
+            <div class="text-[10px] text-slate-400">Completed transactions</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">AVG TICKET SIZE</div>
+            <div class="text-xl sm:text-2xl font-black text-amber-600 font-mono">₹0.00</div>
+            <div class="text-[10px] text-slate-400">Per customer order</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">PAYMENT SPLIT</div>
+            <div class="text-xs font-bold text-slate-700 space-y-0.5 mt-1">
+                <div class="flex justify-between"><span>Cash:</span> <span class="font-mono text-emerald-600">₹0.00</span></div>
+                <div class="flex justify-between"><span>UPI:</span> <span class="font-mono text-blue-600">₹0.00</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Permanent Order History Table (Light Theme Layout) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-100">
+            <h2 class="text-sm font-bold text-slate-900">Order Archives (0)</h2>
+        </div>
+
+        
+            <div class="p-8 text-center text-slate-400 text-xs">
+                No order logs found matching your date/search filter.
+            </div>
+        
+    </div>
+
+</div>
+
+    </main>
+
+    
+        <!-- Touch-Friendly Mobile Sticky Bottom Navigation Bar (Matching Page 3 & 4 Screenshot - 5 Tabs) -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0c1322]/98 backdrop-blur-xl border-t border-[#1f2d44] px-2 py-1.5">
+            <div class="grid grid-cols-5 text-center items-center">
+                <!-- Tab 1: Home -->
+                <a href="pos.html" class="nav-item flex flex-col items-center py-1 font-semibold text-[10px] text-slate-400 hover:text-white ">
+                    <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Home
+                </a>
+                <!-- Tab 2: Menu -->
+                <a href="menu.html" class="nav-item flex flex-col items-center py-1 font-semibold text-[10px] text-slate-400 hover:text-white ">
+                    <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                    Menu
+                </a>
+                <!-- Tab 3: Order (Main POS Red Icon - Page 3 & 4) -->
+                <a href="pos.html" class="nav-item flex flex-col items-center py-1 font-semibold text-[10px] text-slate-400 hover:text-white">
+                    <div class="w-10 h-10 -mt-5 bg-gradient-to-tr from-rose-600 to-red-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-rose-600/40 border-2 border-[#0b0f19]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    Order
+                </a>
+                <!-- Tab 4: History -->
+                <a href="history.html" class="nav-item flex flex-col items-center py-1 font-semibold text-[10px] text-slate-400 hover:text-white text-red-500 font-bold">
+                    <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    History
+                </a>
+                <!-- Tab 5: More -->
+                <a href="/subscription" class="nav-item flex flex-col items-center py-1 font-semibold text-[10px] text-slate-400 hover:text-white ">
+                    <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                    More
+                </a>
+            </div>
+
+            <!-- Status Footer Pill (Matching Page 3 & 4: ● v10.0 Online | POS Terminal v1.0) -->
+            <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 px-3 border-t border-[#161f30]/60 mt-1">
+                <span class="flex items-center font-bold text-emerald-400">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-pulse"></span> v10.0 Online
+                </span>
+                <span class="font-mono text-slate-400">POS Terminal v1.0</span>
+            </div>
+        </nav>
+    
+
+    <!-- Global Thermal Receipt Modal -->
+    <div id="receipt-modal" class="hidden fixed inset-0 z-50 modal-backdrop items-center justify-center p-4">
+        <div class="glass-panel max-w-sm w-full p-5 text-slate-100 rounded-2xl relative shadow-2xl border border-[#1f2d44]">
+            <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
+
+            <!-- Receipt Header -->
+            <div class="text-center pb-3 border-b border-dashed border-slate-700">
+                <div class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 font-extrabold text-xs rounded-full border border-emerald-500/30 mb-2">
+                    ✓ ORDER COMPLETED
+                </div>
+                <h3 id="rc-business-name" class="font-black text-lg text-white uppercase tracking-tight">TOKENLY DEMO</h3>
+                <div id="rc-datetime" class="text-xs text-slate-400 font-mono mt-0.5">05-Oct-2026 12:15 AM</div>
+            </div>
+
+            <!-- Prominent Token Box -->
+            <div class="my-4 p-3 bg-[#0b0f19] rounded-xl border-2 border-red-500/60 text-center shadow-lg">
+                <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">DAILY TOKEN NUMBER</div>
+                <div id="rc-token-num" class="text-4xl font-black text-white font-mono tracking-widest my-0.5 text-red-500">#001</div>
+                <div class="text-[10px] text-slate-400">Peak-Hour Token Counter</div>
+            </div>
+
+            <!-- Items List -->
+            <div class="max-h-48 overflow-y-auto pr-1 mb-3">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-700 pb-1">
+                            <th class="py-1">ITEM</th>
+                            <th class="py-1 text-center">QTY</th>
+                            <th class="py-1 text-right">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rc-items-list">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Price Totals -->
+            <div class="space-y-1 text-xs pt-2 border-t border-dashed border-slate-700">
+                <div class="flex justify-between text-slate-400">
+                    <span>Subtotal</span>
+                    <span id="rc-subtotal" class="font-mono text-slate-200">₹0.00</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                    <span>Discount</span>
+                    <span id="rc-discount" class="font-mono text-slate-200">₹0.00</span>
+                </div>
+                <div class="flex justify-between text-base font-extrabold text-white pt-2 border-t border-slate-800">
+                    <span>Grand Total</span>
+                    <span id="rc-grandtotal" class="font-mono text-emerald-400">₹0.00</span>
+                </div>
+                <div class="text-[11px] text-slate-400 pt-1">
+                    Payment Mode: <span id="rc-payment-mode" class="font-bold text-white uppercase">CASH</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-2 gap-3 mt-5">
+                <button onclick="triggerThermalPrint()" class="w-full py-2.5 rounded-xl font-bold text-xs bg-[#161f30] hover:bg-[#1f2d44] text-slate-200 border border-[#1f2d44] flex items-center justify-center space-x-1.5 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <span>Print 58mm</span>
+                </button>
+                <button onclick="closeReceiptModal()" class="w-full py-2.5 rounded-xl font-extrabold text-xs btn-red-bill flex items-center justify-center transition">
+                    Next Order →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Master Scripts -->
+    <script src="./static/js/main.js"></script>
+    
+</body>
+</html>

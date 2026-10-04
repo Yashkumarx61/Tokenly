@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Sales History & Permanent Logs - {{ business.business_name }}{% endblock %}
+
+{% block content %}
+<style>
+/* Light Theme Overrides for Sales History View */
+body {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+header span.text-white {
+    color: #0f172a !important;
+}
+
+header span.text-slate-400 {
+    color: #64748b !important;
+}
+</style>
+
+<div class="space-y-6">
+
+    <!-- Header Banner (Crisp White Light Theme) -->
+    <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-xl font-extrabold text-slate-900">Permanent Sales & Token Logs</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Review past earnings, search daily tokens, and reprint thermal receipts</p>
+        </div>
+    </div>
+
+    <!-- Date Filters Bar (Light Mode Contrast) -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <form method="GET" action="{{ url_for('history.order_logs') }}" class="flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Filter Presets -->
+            <div class="flex items-center space-x-1.5 overflow-x-auto">
+                <a href="{{ url_for('history.order_logs', preset='today') }}" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition {% if preset == 'today' %}bg-red-600 text-white border-red-600 shadow-sm{% else %}bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200{% endif %}">
+                    Today
+                </a>
+                <a href="{{ url_for('history.order_logs', preset='yesterday') }}" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition {% if preset == 'yesterday' %}bg-red-600 text-white border-red-600 shadow-sm{% else %}bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200{% endif %}">
+                    Yesterday
+                </a>
+                <a href="{{ url_for('history.order_logs', preset='week') }}" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition {% if preset == 'week' %}bg-red-600 text-white border-red-600 shadow-sm{% else %}bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200{% endif %}">
+                    Last 7 Days
+                </a>
+                <a href="{{ url_for('history.order_logs', preset='month') }}" 
+                    class="px-3 py-1.5 rounded-xl text-xs font-bold border transition {% if preset == 'month' %}bg-red-600 text-white border-red-600 shadow-sm{% else %}bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200{% endif %}">
+                    Last 30 Days
+                </a>
+            </div>
+
+            <!-- Custom Date Range & Search Input -->
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <input type="hidden" name="preset" value="custom">
+                <input type="date" name="start_date" value="{{ start_date }}" class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-800 font-medium">
+                <span class="text-xs text-slate-400">to</span>
+                <input type="date" name="end_date" value="{{ end_date }}" class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-800 font-medium">
+                
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search Token #..." class="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-300 text-xs text-slate-900 placeholder-slate-400 w-32 focus:outline-none focus:border-blue-600">
+                
+                <button type="submit" class="px-3.5 py-1.5 rounded-xl font-bold text-xs btn-blue">
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Key Sales Analytics Cards (Crisp White Light Theme) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOTAL REVENUE</div>
+            <div class="text-xl sm:text-2xl font-black text-emerald-600 font-mono">₹{{ total_revenue }}</div>
+            <div class="text-[10px] text-slate-400">Filtered timeframe</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">TOKENS GENERATED</div>
+            <div class="text-xl sm:text-2xl font-black text-slate-900 font-mono">{{ total_orders }}</div>
+            <div class="text-[10px] text-slate-400">Completed transactions</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">AVG TICKET SIZE</div>
+            <div class="text-xl sm:text-2xl font-black text-amber-600 font-mono">₹{{ avg_order_value }}</div>
+            <div class="text-[10px] text-slate-400">Per customer order</div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+            <div class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">PAYMENT SPLIT</div>
+            <div class="text-xs font-bold text-slate-700 space-y-0.5 mt-1">
+                <div class="flex justify-between"><span>Cash:</span> <span class="font-mono text-emerald-600">₹{{ cash_total }}</span></div>
+                <div class="flex justify-between"><span>UPI:</span> <span class="font-mono text-blue-600">₹{{ upi_total }}</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Permanent Order History Table (Light Theme Layout) -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-100">
+            <h2 class="text-sm font-bold text-slate-900">Order Archives ({{ orders|length }})</h2>
+        </div>
+
+        {% if not orders %}
+            <div class="p-8 text-center text-slate-400 text-xs">
+                No order logs found matching your date/search filter.
+            </div>
+        {% else %}
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 text-slate-600 uppercase font-bold text-[10px] tracking-wider border-b border-slate-200">
+                        <tr>
+                            <th class="p-3.5">Token #</th>
+                            <th class="p-3.5">Date & Time</th>
+                            <th class="p-3.5">Customer / Table</th>
+                            <th class="p-3.5">Items Summary</th>
+                            <th class="p-3.5">Total</th>
+                            <th class="p-3.5">Payment</th>
+                            <th class="p-3.5 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        {% for order in orders %}
+                            <tr class="hover:bg-slate-50/80 transition">
+                                <td class="p-3.5 font-mono font-black text-base text-red-600">
+                                    {{ order.token_number }}
+                                </td>
+                                <td class="p-3.5 font-mono text-slate-600">
+                                    {{ order.created_at.strftime('%d-%b-%Y %I:%M %p') }}
+                                </td>
+                                <td class="p-3.5 text-slate-700">
+                                    {% if order.customer_name %}<div class="font-bold text-slate-900">{{ order.customer_name }}</div>{% endif %}
+                                    {% if order.table_number %}<div class="text-[10px] text-amber-700 font-semibold">Table: {{ order.table_number }}</div>{% endif %}
+                                    {% if not order.customer_name and not order.table_number %}<span class="text-slate-400">—</span>{% endif %}
+                                </td>
+                                <td class="p-3.5 text-slate-700 max-w-xs">
+                                    <div class="space-y-0.5">
+                                        {% for item in order.items %}
+                                            <div class="text-[11px] truncate">
+                                                <span class="font-bold text-slate-800">{{ item.quantity }}x {{ item.item_name }}</span>
+                                                <span class="text-[9px] font-mono text-slate-500">({{ item.portion[0]|upper }})</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="p-3.5 font-mono font-black text-emerald-600 text-sm">
+                                    ₹{{ "%.2f"|format(order.grand_total) }}
+                                </td>
+                                <td class="p-3.5">
+                                    <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                                        {{ order.payment_method }}
+                                    </span>
+                                </td>
+                                <td class="p-3.5 text-right">
+                                    <button onclick="reprintOrder({{ order.id }})" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 flex items-center space-x-1.5 ml-auto transition">
+                                        <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                                        <span>Reprint</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
